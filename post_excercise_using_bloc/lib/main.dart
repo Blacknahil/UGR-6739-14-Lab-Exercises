@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart' as http;
@@ -27,13 +29,13 @@ class Post {
   final int id;
   final int userId;
   final String title;
-  final String body;
+  final bool completed;
 
   Post({
     required this.id,
     required this.userId,
     required this.title,
-    required this.body,
+    required this.completed,
   });
 
   factory Post.fromJson(Map<String, dynamic> json) {
@@ -41,7 +43,7 @@ class Post {
       id: json['id'],
       userId: json['userId'],
       title: json['title'],
-      body: json['body'],
+      completed: json['completed'],
     );
   }
 }
@@ -49,7 +51,7 @@ class Post {
 class PostService {
   Future<List<Post>> getPosts() async {
     final response =
-        await http.get(Uri.parse('https://jsonplaceholder.typicode.com/posts'));
+        await http.get(Uri.parse('https://jsonplaceholder.typicode.com/todos'));
     if (response.statusCode == 200) {
       List<dynamic> jsonList = json.decode(response.body);
       return jsonList.map((json) => Post.fromJson(json)).toList();
@@ -95,7 +97,7 @@ class PostListScreen extends StatelessWidget {
                 final post = posts[index];
                 return ListTile(
                   title: Text(post.title),
-                  subtitle: Text(post.body),
+                  subtitle: Text(post.completed.toString()),
                 );
               },
             );

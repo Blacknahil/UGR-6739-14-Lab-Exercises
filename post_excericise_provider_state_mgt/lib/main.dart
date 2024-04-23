@@ -14,24 +14,24 @@ void main() {
 }
 
 class Post {
-  final int userId;
   final int id;
+  final int userId;
   final String title;
-  final String body;
+  final bool completed;
 
   Post({
-    required this.userId,
     required this.id,
+    required this.userId,
     required this.title,
-    required this.body,
+    required this.completed,
   });
 
   factory Post.fromJson(Map<String, dynamic> json) {
     return Post(
-      userId: json['userId'] as int,
-      id: json['id'] as int,
-      title: json['title'] as String,
-      body: json['body'] as String,
+      id: json['id'],
+      userId: json['userId'],
+      title: json['title'],
+      completed: json['completed'],
     );
   }
 }
@@ -53,7 +53,7 @@ class PostProvider with ChangeNotifier {
 
     try {
       final response = await http
-          .get(Uri.parse('https://jsonplaceholder.typicode.com/posts'));
+          .get(Uri.parse('https://jsonplaceholder.typicode.com/todos'));
 
       if (response.statusCode == 200) {
         List<dynamic> body = jsonDecode(response.body);
@@ -98,7 +98,8 @@ class MyApp extends StatelessWidget {
                 itemBuilder: (context, index) {
                   return ListTile(
                     title: Text(postProvider.posts[index].title),
-                    subtitle: Text(postProvider.posts[index].body),
+                    subtitle:
+                        Text(postProvider.posts[index].completed.toString()),
                   );
                 },
               );

@@ -21,13 +21,13 @@ class Post {
   final int userId;
   final int id;
   final String title;
-  final String body;
+  final bool completed;
 
   Post({
     required this.userId,
     required this.id,
     required this.title,
-    required this.body,
+    required this.completed,
   });
 
   factory Post.fromJson(Map<String, dynamic> json) {
@@ -35,14 +35,14 @@ class Post {
       userId: json['userId'] as int,
       id: json['id'] as int,
       title: json['title'] as String,
-      body: json['body'] as String,
+      completed: json['completed'] as bool,
     );
   }
 }
 
 Future<List<Post>> fetchPost() async {
   final response =
-      await http.get(Uri.parse('https://jsonplaceholder.typicode.com/posts'));
+      await http.get(Uri.parse('https://jsonplaceholder.typicode.com/todos'));
 
   if (response.statusCode == 200) {
     final List<dynamic> body = jsonDecode(response.body);
@@ -77,9 +77,10 @@ class MyHomePage extends ConsumerWidget {
             itemCount: posts.length,
             itemBuilder: (context, index) {
               final post = posts[index];
+              devtools.log(post.toString());
               return ListTile(
                 title: Text(post.title),
-                subtitle: Text(post.body),
+                subtitle: Text(post.completed.toString()),
               );
             },
           );
