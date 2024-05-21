@@ -29,8 +29,8 @@ fun MessageCard(name: String) {
 }
 
 
-@Preview(showBackground = true)
+@Preview
 @Composable
-fun GreetingPreview() {
-        MessageCard("Android")
+fun PreviewMessageCard() {
+    MessageCard("Android")
 }
